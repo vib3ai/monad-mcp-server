@@ -11,11 +11,6 @@ export class MonadClient {
         // Initialize the MonadAgentKit
         this.agent = new MonadAgentKit(formattedKey);
 
-        // Log custom RPC URL if provided
-        if (rpcUrl) {
-            console.log(`Using custom RPC URL: ${rpcUrl}`);
-            // Note: RPC URL handling would depend on the actual MonadAgentKit implementation
-        }
     }
 
     getWalletAddress(): string {
