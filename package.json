@@ -1,0 +1,46 @@
+{
+  "name": "@vib3ai/monad-mcp-server",
+  "version": "0.1.1",
+  "description": "A Model Context Protocol server allows to interact with Monad blockchain",
+  "type": "module",
+  "main": "build/index.js",
+  "bin": {
+    "monad-server": "./build/index.js"
+  },
+  "files": [
+    "build",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "start": "node build/index.js",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "mcp",
+    "modelcontextprotocol",
+    "server",
+    "monad",
+    "blockchain"
+  ],
+  "author": "Vib3 AI",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^0.6.0",
+    "dotenv": "^16.4.7",
+    "monad-agent-kit": "latest",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.24",
+    "typescript": "^5.3.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vib3ai/monad-mcp-server.git"
+  },
+  "bugs": {
+    "url": "https://github.com/vib3ai/monad-mcp-server/issues"
+  },
+  "homepage": "https://github.com/vib3ai/monad-mcp-server#readme"
+}
