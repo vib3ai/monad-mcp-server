@@ -64,7 +64,7 @@ export class MonadServer {
     this.server.setRequestHandler(ListToolsRequestSchema, async () => ({
       tools: [
         {
-          name: 'get_balance',
+          name: 'getBalance',
           description: 'Get the balance of a Monad wallet address',
           inputSchema: {
             type: 'object',
@@ -77,7 +77,7 @@ export class MonadServer {
           }
         } as Tool,
         {
-          name: 'transfer_tokens',
+          name: 'transferETH',
           description: 'Transfer tokens to another address on Monad',
           inputSchema: {
             type: 'object',
@@ -104,9 +104,9 @@ export class MonadServer {
 
       try {
         switch (name) {
-          case 'get_balance':
+          case 'getBalance':
             return await this.handleGetBalance(args);
-          case 'transfer_tokens':
+          case 'transferETH':
             return await this.handleTransferTokens(args);
           default:
             throw new McpError(

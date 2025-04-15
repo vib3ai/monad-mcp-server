@@ -1,4 +1,4 @@
-import { MonadAgentKit, ACTIONS } from 'monad-agent-kit';
+import { MonadAgentKit, ACTIONS } from '@vib3ai/monad-agent-kit';
 import { MonadError, BalanceResponse, TransactionResponse } from './types.js';
 
 export class MonadClient {
@@ -28,14 +28,14 @@ export class MonadClient {
 
             // Use the native get_balance tool from monad-agent-kit
             // Pass the agent instance to the tool function
-            const result = await ACTIONS.NATIVE_ACTIONS.BALANCE(
+            const result = await ACTIONS.getBalance(
                 this.agent,
                 targetAddress
             );
 
             return {
                 address: targetAddress,
-                balance: result.balance
+                balance: result.balance || '0'
             };
         } catch (error) {
             console.error('Error in getBalance:', error);
@@ -51,14 +51,14 @@ export class MonadClient {
         try {
             // Use the native transfer tool from monad-agent-kit
             // Pass the agent instance to the tool function
-            const result = await ACTIONS.NATIVE_ACTIONS.TRANSFER(
+            const result = await ACTIONS.transferETH(
                 this.agent,
                 to,
                 amount
             );
 
             return {
-                txHash: result.txHash,
+                txHash: result.txHash || '',
                 from: this.getWalletAddress(),
                 to,
                 amount
@@ -67,7 +67,7 @@ export class MonadClient {
             console.error('Error in transferTokens:', error);
             throw new MonadError(
                 'Failed to transfer tokens',
-                'transfer_failed',
+                'transferFailed',
                 500
             );
         }
