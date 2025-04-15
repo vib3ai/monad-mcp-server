@@ -1,5 +1,8 @@
-import { MonadAgentKit, ACTIONS } from '@vib3ai/monad-agent-kit';
-import { MonadError, BalanceResponse, TransactionResponse } from './types.js';
+import { MonadAgentKit } from '@vib3ai/monad-agent-kit';
+import { BalanceResponse, TransactionResponse } from './types.js';
+import * as NativeApp from './apps/native.js';
+import * as ERC20App from './apps/erc20.js';
+import * as ENSApp from './apps/ens.js';
 
 export class MonadClient {
     private agent: MonadAgentKit;
@@ -10,61 +13,64 @@ export class MonadClient {
 
         // Initialize the MonadAgentKit
         this.agent = new MonadAgentKit(formattedKey);
-
     }
 
+    // Native operations
     getWalletAddress(): string {
         return this.agent.getWalletAddress();
     }
 
     async getBalance(address?: string): Promise<BalanceResponse> {
-        try {
-            const targetAddress = address || this.getWalletAddress();
-
-            // Use the native get_balance tool from monad-agent-kit
-            // Pass the agent instance to the tool function
-            const result = await ACTIONS.getBalance(
-                this.agent,
-                targetAddress
-            );
-
-            return {
-                address: targetAddress,
-                balance: result.balance || '0'
-            };
-        } catch (error) {
-            console.error('Error in getBalance:', error);
-            throw new MonadError(
-                'Failed to get balance',
-                'get_balance_failed',
-                500
-            );
-        }
+        return NativeApp.getBalance(this.agent, address);
     }
 
-    async transferTokens(to: string, amount: string): Promise<TransactionResponse> {
-        try {
-            // Use the native transfer tool from monad-agent-kit
-            // Pass the agent instance to the tool function
-            const result = await ACTIONS.transferETH(
-                this.agent,
-                to,
-                amount
-            );
+    async transferETH(to: string, amount: string): Promise<TransactionResponse> {
+        return NativeApp.transferETH(this.agent, to, amount);
+    }
 
-            return {
-                txHash: result.txHash || '',
-                from: this.getWalletAddress(),
-                to,
-                amount
-            };
-        } catch (error) {
-            console.error('Error in transferTokens:', error);
-            throw new MonadError(
-                'Failed to transfer tokens',
-                'transferFailed',
-                500
-            );
-        }
+    // ERC20 Token operations
+    async getTokenBalance(tokenAddress: string, ownerAddress?: string): Promise<ERC20App.TokenBalanceResponse> {
+        return ERC20App.getTokenBalance(this.agent, tokenAddress, ownerAddress);
+    }
+
+    async transferToken(tokenAddress: string, to: string, amount: string): Promise<ERC20App.TokenTransferResponse> {
+        return ERC20App.transferToken(this.agent, tokenAddress, to, amount);
+    }
+
+    async approveToken(tokenAddress: string, spender: string, amount: string): Promise<{ txHash: string }> {
+        return ERC20App.approveToken(this.agent, tokenAddress, spender, amount);
+    }
+
+    async getTokenAllowance(tokenAddress: string, ownerAddress: string, spenderAddress: string): Promise<ERC20App.TokenAllowanceResponse> {
+        return ERC20App.getTokenAllowance(this.agent, tokenAddress, ownerAddress, spenderAddress);
+    }
+
+    async getTokenInfo(tokenAddress: string): Promise<ERC20App.TokenInfoResponse> {
+        return ERC20App.getTokenInfo(this.agent, tokenAddress);
+    }
+
+    // ENS operations
+    async getENSProfile(name: string): Promise<ENSApp.ProfileResponse> {
+        return ENSApp.getProfile(this.agent, name);
+    }
+
+    async resolveENSName(name: string): Promise<ENSApp.ResolveAddressResponse> {
+        return ENSApp.resolveAddress(this.agent, name);
+    }
+
+    async getPrimaryENSName(address: string): Promise<ENSApp.PrimaryNameResponse> {
+        return ENSApp.getPrimaryName(this.agent, address);
+    }
+
+    async getENSNames(address: string): Promise<string[]> {
+        return ENSApp.getNamesForAddress(this.agent, address);
+    }
+
+    async getENSDomainPrice(name: string, duration: number = 365): Promise<ENSApp.DomainPriceResponse> {
+        return ENSApp.getDomainPrice(this.agent, name, duration);
+    }
+
+    async registerENSDomain(name: string, tld: string = 'nad', duration: number = 365): Promise<ENSApp.RegisterDomainResponse> {
+        return ENSApp.registerDomain(this.agent, name, tld, duration);
     }
 }

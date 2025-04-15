@@ -4,7 +4,6 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import {
   ListToolsRequestSchema,
   CallToolRequestSchema,
-  Tool,
   ErrorCode,
   McpError,
   TextContent
@@ -12,10 +11,10 @@ import {
 import { ResponseFormatter } from './formatter.js';
 import {
   Config, ConfigSchema,
-  GetBalanceSchema, TransferTokensSchema,
   MonadError
 } from './types.js';
 import { MonadClient } from './monad-client.js';
+import { allTools, getHandler } from './handlers/index.js';
 import dotenv from 'dotenv';
 
 export class MonadServer {
@@ -62,39 +61,7 @@ export class MonadServer {
   private setupToolHandlers(): void {
     // List available tools
     this.server.setRequestHandler(ListToolsRequestSchema, async () => ({
-      tools: [
-        {
-          name: 'getBalance',
-          description: 'Get the balance of a Monad wallet address',
-          inputSchema: {
-            type: 'object',
-            properties: {
-              address: {
-                type: 'string',
-                description: 'Ethereum address to check balance for. If omitted, uses your wallet address.'
-              }
-            }
-          }
-        } as Tool,
-        {
-          name: 'transferETH',
-          description: 'Transfer tokens to another address on Monad',
-          inputSchema: {
-            type: 'object',
-            properties: {
-              to: {
-                type: 'string',
-                description: 'Recipient Ethereum address'
-              },
-              amount: {
-                type: 'string',
-                description: 'Amount to transfer in ETH'
-              }
-            },
-            required: ['to', 'amount']
-          }
-        } as Tool
-      ]
+      tools: allTools
     }));
 
     // Handle tool execution
@@ -103,86 +70,20 @@ export class MonadServer {
       console.error(`Tool called: ${name}`, args);
 
       try {
-        switch (name) {
-          case 'getBalance':
-            return await this.handleGetBalance(args);
-          case 'transferETH':
-            return await this.handleTransferTokens(args);
-          default:
-            throw new McpError(
-              ErrorCode.MethodNotFound,
-              `Unknown tool: ${name}`
-            );
+        const handler = getHandler(name);
+
+        if (!handler) {
+          throw new McpError(
+            ErrorCode.MethodNotFound,
+            `Unknown tool: ${name}`
+          );
         }
+
+        return await handler(this.client, args);
       } catch (error) {
         return this.handleError(error);
       }
     });
-  }
-
-  private async handleGetBalance(args: unknown) {
-    const result = GetBalanceSchema.safeParse(args);
-    if (!result.success) {
-      throw new McpError(
-        ErrorCode.InvalidParams,
-        `Invalid parameters: ${result.error.message}`
-      );
-    }
-
-    try {
-      const balanceResponse = await this.client.getBalance(result.data.address);
-
-      return {
-        content: [{
-          type: 'text',
-          text: ResponseFormatter.formatBalanceResponse(balanceResponse)
-        }] as TextContent[]
-      };
-    } catch (error) {
-      if (error instanceof MonadError) {
-        throw error;
-      }
-      console.error('Error getting balance:', error);
-      throw new MonadError(
-        'Failed to get balance',
-        'transaction_failed',
-        500
-      );
-    }
-  }
-
-  private async handleTransferTokens(args: unknown) {
-    const result = TransferTokensSchema.safeParse(args);
-    if (!result.success) {
-      throw new McpError(
-        ErrorCode.InvalidParams,
-        `Invalid parameters: ${result.error.message}`
-      );
-    }
-
-    try {
-      const txResponse = await this.client.transferTokens(
-        result.data.to,
-        result.data.amount
-      );
-
-      return {
-        content: [{
-          type: 'text',
-          text: ResponseFormatter.formatTransactionResponse(txResponse)
-        }] as TextContent[]
-      };
-    } catch (error) {
-      if (error instanceof MonadError) {
-        throw error;
-      }
-      console.error('Error transferring tokens:', error);
-      throw new MonadError(
-        'Failed to transfer tokens',
-        'transaction_failed',
-        500
-      );
-    }
   }
 
   private handleError(error: unknown) {
