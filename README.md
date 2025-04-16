@@ -8,18 +8,41 @@ This MCP server allows AI assistants to interact with the Monad blockchain, enab
 
 2. Add this configuration to your AI assistant config file:
 
-**Windows**: `%APPDATA%\Claude\claude_desktop_config.json`  
+**Windows**:
+1. Press `Windows + R` to open Run dialog
+2. Type `%APPDATA%\Claude` and press Enter
+3. Create or edit `claude_desktop_config.json` file
+4. Open Command Prompt (cmd)
+5. Type `echo %appdata%` and copy the output value
+6. Paste the value into `claude_desktop_config.json` file:
+
+```json
+{
+  "mcpServers": {
+    "monad-mcp-server": {
+      "command": "npx",
+      "args": ["-y", "@vib3ai/monad-mcp-server"],
+      "env": {
+        "APPDATA": "YOUR_APPDATA_PATH",
+        "WALLET_PRIVATE_KEY": "YOUR_PRIVATE_KEY_HERE",
+        "MONAD_RPC_URL": "https://testnet-rpc.monad.xyz/"
+      }
+    }
+  }
+}
+```
+
 **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
 
 ```json
 {
   "mcpServers": {
-    "monad-mcp": {
+    "monad-mcp-server": {
       "command": "npx",
       "args": ["-y", "@vib3ai/monad-mcp-server"],
       "env": {
-        "WALLET_PRIVATE_KEY": "your_private_key_here",
-        "MONAD_RPC_URL": "https://rpc.monad.xyz/"
+        "WALLET_PRIVATE_KEY": "",
+        "MONAD_RPC_URL": "https://testnet-rpc.monad.xyz/"
       }
     }
   }
