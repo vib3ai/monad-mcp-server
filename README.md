@@ -1,6 +1,6 @@
 # Monad MCP Server
 
-This MCP server allows AI assistants to interact with the Monad blockchain, enabling balance checks and token transfers.
+This MCP server allows AI assistants to interact with the Monad blockchain, enabling interaction with DApps.
 
 ## Quick Start
 
