@@ -5,12 +5,14 @@ import { MonadClient } from '../monad-client.js';
 import * as NativeHandlers from './native.js';
 import * as ERC20Handlers from './erc20.js';
 import * as ENSHandlers from './ens.js';
+import * as ShmonadHandlers from './shmonad.js';
 
 // Export all tool definitions
 export const allTools: Tool[] = [
     ...NativeHandlers.nativeTools,
     ...ERC20Handlers.erc20Tools,
-    ...ENSHandlers.ensTools
+    ...ENSHandlers.ensTools,
+    ...ShmonadHandlers.shmonadTools
 ];
 
 // Create a mapping of tool names to handler functions
@@ -34,9 +36,13 @@ const handlers: Record<string, HandlerFunction> = {
     getPrimaryENSName: ENSHandlers.handleGetPrimaryENSName,
     getENSNames: ENSHandlers.handleGetENSNames,
     getENSDomainPrice: ENSHandlers.handleGetENSDomainPrice,
-    registerENSDomain: ENSHandlers.handleRegisterENSDomain
+    registerENSDomain: ENSHandlers.handleRegisterENSDomain,
+
+    // Shmonad handlers
+    stakeShmonad: ShmonadHandlers.handleStakeShmonad,
+    unstakeShmonad: ShmonadHandlers.handleUnstakeShmonad
 };
 
-export function getHandler(toolName: string): HandlerFunction | undefined {
-    return handlers[toolName];
+export function getHandler(name: string): HandlerFunction | undefined {
+    return handlers[name];
 } 

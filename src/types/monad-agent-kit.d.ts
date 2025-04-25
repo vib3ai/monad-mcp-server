@@ -116,6 +116,19 @@ declare module '@vib3ai/monad-agent-kit' {
         amount: string;
     }
 
+    // Shmonad Types
+    export interface ShmonadStakeResult {
+        transactionHash: string;
+        status: string;
+        message: string;
+    }
+
+    export interface ShmonadUnstakeResult {
+        transactionHash: string;
+        status: string;
+        message: string;
+    }
+
     // Actions
     export const ACTIONS: {
         // Native actions
@@ -163,5 +176,9 @@ declare module '@vib3ai/monad-agent-kit' {
             agent: MonadAgentKit,
             tokenAddress: string
         ) => Promise<TokenInfoResult>;
+
+        // Shmonad actions
+        stake: (agent: MonadAgentKit, amount: number) => Promise<ShmonadStakeResult>;
+        unstake: (agent: MonadAgentKit, shares: number) => Promise<ShmonadUnstakeResult>;
     };
 } 

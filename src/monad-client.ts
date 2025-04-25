@@ -3,6 +3,7 @@ import { BalanceResponse, TransactionResponse } from './types.js';
 import * as NativeApp from './apps/native.js';
 import * as ERC20App from './apps/erc20.js';
 import * as ENSApp from './apps/ens.js';
+import * as ShmonadApp from './apps/shmonad.js';
 
 export class MonadClient {
     private agent: MonadAgentKit;
@@ -70,7 +71,16 @@ export class MonadClient {
         return ENSApp.getDomainPrice(this.agent, name, duration);
     }
 
-    async registerENSDomain(name: string, tld: string = 'nad', duration: number = 365): Promise<ENSApp.RegisterDomainResponse> {
+    async registerENSDomain(name: string, tld?: string, duration?: number): Promise<ENSApp.RegisterDomainResponse> {
         return ENSApp.registerDomain(this.agent, name, tld, duration);
+    }
+
+    // Shmonad operations
+    async stakeShmonad(amount: number): Promise<ShmonadApp.StakeResponse> {
+        return ShmonadApp.stake(this.agent, amount);
+    }
+
+    async unstakeShmonad(shares: number): Promise<ShmonadApp.UnstakeResponse> {
+        return ShmonadApp.unstake(this.agent, shares);
     }
 }
