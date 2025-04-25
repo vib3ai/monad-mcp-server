@@ -1,6 +1,6 @@
 {
   "name": "@vib3ai/monad-mcp-server",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "A Model Context Protocol server allows to interact with Monad blockchain",
   "type": "module",
   "main": "build/index.js",
