@@ -26,23 +26,31 @@ async function getTokenInfo(tokenAddress: string): Promise<{ decimal: number }> 
         // API endpoint for token search (Kuru API)
         const apiUrl = 'https://api.kuru.io/api/v2/tokens/search';
 
-        // Try to get the token info
+        // Normalize address for comparison
+        const normalizedAddress = tokenAddress.toLowerCase();
+
+        // Fetch all tokens (limit=20 should cover most common tokens)
         const response = await axios.get(apiUrl, {
             params: {
-                limit: 1,
-                address: tokenAddress
+                limit: 20
             }
         });
 
-        if (response.data?.success &&
-            response.data?.data?.data &&
-            response.data.data.data.length > 0) {
-            return {
-                decimal: response.data.data.data[0].decimal
-            };
+        if (response.data?.success && response.data?.data?.data) {
+            // Find the token by address in the response
+            const token = response.data.data.data.find(
+                (t: any) => t.address.toLowerCase() === normalizedAddress
+            );
+
+            if (token) {
+                return {
+                    decimal: token.decimal
+                };
+            }
         }
 
         // Default decimals if token not found
+        console.log(`Token not found for address ${tokenAddress}, using default decimals (18)`);
         return { decimal: 18 };
     } catch (error) {
         console.error('Error getting token info:', error);
