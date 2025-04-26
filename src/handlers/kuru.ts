@@ -20,33 +20,33 @@ export const SwapSchema = z.object({
 
 // Tool definitions
 export const kuruTools: Tool[] = [
-    {
-        name: 'getKuruPrice',
-        description: 'Get the price for a token swap on Kuru DEX',
-        inputSchema: {
-            type: 'object',
-            properties: {
-                tokenInAddress: {
-                    type: 'string',
-                    description: 'Address of the input token'
-                },
-                tokenOutAddress: {
-                    type: 'string',
-                    description: 'Address of the output token'
-                },
-                amountToSwap: {
-                    type: 'number',
-                    description: 'Amount to swap'
-                },
-                amountType: {
-                    type: 'string',
-                    enum: ['amountIn', 'amountOut'],
-                    description: 'Type of amount (default: amountIn)'
-                }
-            },
-            required: ['tokenInAddress', 'tokenOutAddress', 'amountToSwap']
-        }
-    },
+    // {
+    //     name: 'getKuruPrice',
+    //     description: 'Get the price for a token swap on Kuru DEX',
+    //     inputSchema: {
+    //         type: 'object',
+    //         properties: {
+    //             tokenInAddress: {
+    //                 type: 'string',
+    //                 description: 'Address of the input token'
+    //             },
+    //             tokenOutAddress: {
+    //                 type: 'string',
+    //                 description: 'Address of the output token'
+    //             },
+    //             amountToSwap: {
+    //                 type: 'number',
+    //                 description: 'Amount to swap'
+    //             },
+    //             amountType: {
+    //                 type: 'string',
+    //                 enum: ['amountIn', 'amountOut'],
+    //                 description: 'Type of amount (default: amountIn)'
+    //             }
+    //         },
+    //         required: ['tokenInAddress', 'tokenOutAddress', 'amountToSwap']
+    //     }
+    // },
     {
         name: 'swapOnKuru',
         description: 'Swap tokens on Kuru DEX',
