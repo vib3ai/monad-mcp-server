@@ -51,10 +51,7 @@ This MCP server allows AI assistants to interact with the Monad blockchain, enab
 
 3. Restart your AI assistant
 
-That's it! Your AI assistant can now interact with Monad blockchain through two tools:
-
-- `getBalance`: Check wallet balance
-- `transferETH`: Transfer tokens to another address
+That's it! Your AI assistant can now interact with Monad blockchain.
 
 ## Example Usage
 
