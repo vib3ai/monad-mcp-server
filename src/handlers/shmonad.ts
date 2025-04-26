@@ -15,7 +15,7 @@ export const UnstakeSchema = z.object({
 // Tool definitions
 export const shmonadTools: Tool[] = [
     {
-        name: 'stakeShmonad',
+        name: 'stake',
         description: 'Stake native tokens (MON) in the Shmonad staking contract',
         inputSchema: {
             type: 'object',
@@ -29,7 +29,7 @@ export const shmonadTools: Tool[] = [
         }
     },
     {
-        name: 'unstakeShmonad',
+        name: 'unstake',
         description: 'Unstake tokens from the Shmonad staking contract',
         inputSchema: {
             type: 'object',
@@ -44,7 +44,7 @@ export const shmonadTools: Tool[] = [
     }
 ];
 
-export async function handleStakeShmonad(client: MonadClient, args: unknown) {
+export async function handleStake(client: MonadClient, args: unknown) {
     const result = StakeSchema.safeParse(args);
     if (!result.success) {
         throw new McpError(
@@ -54,7 +54,7 @@ export async function handleStakeShmonad(client: MonadClient, args: unknown) {
     }
 
     try {
-        const response = await client.stakeShmonad(result.data.amount);
+        const response = await client.stake(result.data.amount);
 
         return {
             content: [{
@@ -71,7 +71,7 @@ export async function handleStakeShmonad(client: MonadClient, args: unknown) {
     }
 }
 
-export async function handleUnstakeShmonad(client: MonadClient, args: unknown) {
+export async function handleUnstake(client: MonadClient, args: unknown) {
     const result = UnstakeSchema.safeParse(args);
     if (!result.success) {
         throw new McpError(
@@ -81,7 +81,7 @@ export async function handleUnstakeShmonad(client: MonadClient, args: unknown) {
     }
 
     try {
-        const response = await client.unstakeShmonad(result.data.shares);
+        const response = await client.unstake(result.data.shares);
 
         return {
             content: [{

@@ -4,6 +4,8 @@ import * as NativeApp from './apps/native.js';
 import * as ERC20App from './apps/erc20.js';
 import * as ENSApp from './apps/ens.js';
 import * as ShmonadApp from './apps/shmonad.js';
+import * as KuruApp from './apps/kuru.js';
+import * as TokenApp from './apps/token.js';
 
 export class MonadClient {
     private agent: MonadAgentKit;
@@ -76,11 +78,43 @@ export class MonadClient {
     }
 
     // Shmonad operations
-    async stakeShmonad(amount: number): Promise<ShmonadApp.StakeResponse> {
+    async stake(amount: number): Promise<ShmonadApp.StakeResponse> {
         return ShmonadApp.stake(this.agent, amount);
     }
 
-    async unstakeShmonad(shares: number): Promise<ShmonadApp.UnstakeResponse> {
+    async unstake(shares: number): Promise<ShmonadApp.UnstakeResponse> {
         return ShmonadApp.unstake(this.agent, shares);
+    }
+
+    // Kuru DEX operations
+    async getKuruPrice(
+        tokenInAddress: string,
+        tokenOutAddress: string,
+        amountToSwap: number,
+        amountType?: 'amountIn' | 'amountOut'
+    ): Promise<KuruApp.PriceResponse> {
+        return KuruApp.getPrice(this.agent, tokenInAddress, tokenOutAddress, amountToSwap, amountType);
+    }
+
+    async swapOnKuru(
+        tokenInAddress: string,
+        tokenOutAddress: string,
+        amountToSwap: number,
+        slippageTolerance?: number
+    ): Promise<KuruApp.SwapResponse> {
+        return KuruApp.swap(
+            this.agent,
+            tokenInAddress,
+            tokenOutAddress,
+            amountToSwap,
+            slippageTolerance
+        );
+    }
+
+    // Token search operations
+    async searchTokens(
+        query: string
+    ): Promise<TokenApp.SearchTokenResponse> {
+        return TokenApp.searchTokens(this.agent, query);
     }
 }

@@ -129,6 +129,19 @@ declare module '@vib3ai/monad-agent-kit' {
         message: string;
     }
 
+    // Kuru Types
+    export interface KuruPriceResult {
+        bestPath: any;
+        output: string | number;
+        priceImpact: number;
+        route: string[];
+    }
+
+    export interface KuruSwapResult {
+        transactionHash: string;
+        amountOut: string;
+    }
+
     // Actions
     export const ACTIONS: {
         // Native actions
@@ -143,7 +156,7 @@ declare module '@vib3ai/monad-agent-kit' {
         getDomainPrice: (agent: MonadAgentKit, name: string, duration?: number) => Promise<EnsDomainPriceResult>;
         registerDomain: (agent: MonadAgentKit, name: string, tld?: string, duration?: number) => Promise<EnsRegisterResult>;
 
-        // ERC20 actions - using direct parameters to match implementation
+        // ERC20 actions
         getTokenBalance: (
             agent: MonadAgentKit,
             tokenAddress?: string,
@@ -180,5 +193,25 @@ declare module '@vib3ai/monad-agent-kit' {
         // Shmonad actions
         stake: (agent: MonadAgentKit, amount: number) => Promise<ShmonadStakeResult>;
         unstake: (agent: MonadAgentKit, shares: number) => Promise<ShmonadUnstakeResult>;
+
+        // Kuru actions
+        getPrice: (
+            agent: MonadAgentKit,
+            tokenInAddress: string,
+            tokenOutAddress: string,
+            amountToSwap: number,
+            amountType?: 'amountIn' | 'amountOut'
+        ) => Promise<KuruPriceResult>;
+
+        swap: (
+            agent: MonadAgentKit,
+            tokenInAddress: string,
+            tokenOutAddress: string,
+            amountToSwap: number,
+            inTokenDecimals: number,
+            outTokenDecimals: number,
+            slippageTolerance?: number,
+            approveTokens?: boolean
+        ) => Promise<KuruSwapResult>;
     };
 } 

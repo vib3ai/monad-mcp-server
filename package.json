@@ -28,6 +28,7 @@
   "dependencies": {
     "@modelcontextprotocol/sdk": "^0.6.0",
     "@vib3ai/monad-agent-kit": "^0.1.10",
+    "axios": "^1.9.0",
     "dotenv": "^16.4.7",
     "zod": "^3.24.0"
   },

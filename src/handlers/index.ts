@@ -6,13 +6,17 @@ import * as NativeHandlers from './native.js';
 import * as ERC20Handlers from './erc20.js';
 import * as ENSHandlers from './ens.js';
 import * as ShmonadHandlers from './shmonad.js';
+import * as KuruHandlers from './kuru.js';
+import * as TokenHandlers from './token.js';
 
 // Export all tool definitions
 export const allTools: Tool[] = [
     ...NativeHandlers.nativeTools,
     ...ERC20Handlers.erc20Tools,
     ...ENSHandlers.ensTools,
-    ...ShmonadHandlers.shmonadTools
+    ...ShmonadHandlers.shmonadTools,
+    ...KuruHandlers.kuruTools,
+    ...TokenHandlers.tokenTools
 ];
 
 // Create a mapping of tool names to handler functions
@@ -39,8 +43,15 @@ const handlers: Record<string, HandlerFunction> = {
     registerENSDomain: ENSHandlers.handleRegisterENSDomain,
 
     // Shmonad handlers
-    stakeShmonad: ShmonadHandlers.handleStakeShmonad,
-    unstakeShmonad: ShmonadHandlers.handleUnstakeShmonad
+    stake: ShmonadHandlers.handleStake,
+    unstake: ShmonadHandlers.handleUnstake,
+
+    // Kuru handlers
+    getKuruPrice: KuruHandlers.handleGetKuruPrice,
+    swapOnKuru: KuruHandlers.handleSwapOnKuru,
+
+    // Token handlers
+    searchTokens: TokenHandlers.handleSearchTokens
 };
 
 export function getHandler(name: string): HandlerFunction | undefined {
