@@ -47,7 +47,7 @@ const handlers: Record<string, HandlerFunction> = {
     unstake: ShmonadHandlers.handleUnstake,
 
     // Kuru handlers
-    getKuruPrice: KuruHandlers.handleGetKuruPrice,
+    // getKuruPrice: KuruHandlers.handleGetKuruPrice,
     swapOnKuru: KuruHandlers.handleSwapOnKuru,
 
     // Token handlers
