@@ -8,6 +8,7 @@ import * as ENSHandlers from './ens.js';
 import * as ShmonadHandlers from './shmonad.js';
 import * as KuruHandlers from './kuru.js';
 import * as TokenHandlers from './token.js';
+import * as NadfunHandlers from './nadfun.js';
 
 // Export all tool definitions
 export const allTools: Tool[] = [
@@ -16,7 +17,8 @@ export const allTools: Tool[] = [
     ...ENSHandlers.ensTools,
     ...ShmonadHandlers.shmonadTools,
     ...KuruHandlers.kuruTools,
-    ...TokenHandlers.tokenTools
+    ...TokenHandlers.tokenTools,
+    ...NadfunHandlers.nadfunTools
 ];
 
 // Create a mapping of tool names to handler functions
@@ -51,7 +53,10 @@ const handlers: Record<string, HandlerFunction> = {
     swapOnKuru: KuruHandlers.handleSwapOnKuru,
 
     // Token handlers
-    searchTokens: TokenHandlers.handleSearchTokens
+    searchTokens: TokenHandlers.handleSearchTokens,
+
+    // Nadfun handlers
+    createCurveWithMetadata: NadfunHandlers.handleCreateCurveWithMetadata
 };
 
 export function getHandler(name: string): HandlerFunction | undefined {

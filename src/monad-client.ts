@@ -6,6 +6,7 @@ import * as ENSApp from './apps/ens.js';
 import * as ShmonadApp from './apps/shmonad.js';
 import * as KuruApp from './apps/kuru.js';
 import * as TokenApp from './apps/token.js';
+import * as NadfunApp from './apps/nadfun.js';
 
 export class MonadClient {
     private agent: MonadAgentKit;
@@ -116,5 +117,29 @@ export class MonadClient {
         query: string
     ): Promise<TokenApp.SearchTokenResponse> {
         return TokenApp.searchTokens(this.agent, query);
+    }
+
+    // Nadfun operations
+    async createCurveWithMetadata(
+        name: string,
+        symbol: string,
+        description: string,
+        imageUrl: string,
+        amountIn: string,
+        homePage?: string,
+        twitter?: string,
+        telegram?: string
+    ): Promise<NadfunApp.CreateCurveResponse> {
+        return NadfunApp.createCurveWithMetadata(
+            this.agent,
+            name,
+            symbol,
+            description,
+            imageUrl,
+            amountIn,
+            homePage,
+            twitter,
+            telegram
+        );
     }
 }

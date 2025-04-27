@@ -213,5 +213,36 @@ declare module '@vib3ai/monad-agent-kit' {
             slippageTolerance?: number,
             approveTokens?: boolean
         ) => Promise<KuruSwapResult>;
+
+        // Nadfun actions
+        createCurveWithMetadata: (
+            agent: MonadAgentKit,
+            creator: string | undefined,
+            name: string,
+            symbol: string,
+            description: string,
+            imageBuffer: Buffer,
+            imageType: string,
+            amountIn: string,
+            homePage?: string,
+            twitter?: string,
+            telegram?: string
+        ) => Promise<NadfunCreateCurveResult>;
+    };
+
+    export const nadfunTools: {
+        createCurveWithMetadata: (
+            agent: MonadAgentKit,
+            creator: string | undefined,
+            name: string,
+            symbol: string,
+            description: string,
+            imageBuffer: Buffer,
+            imageType: string,
+            amountIn: string,
+            homePage?: string,
+            twitter?: string,
+            telegram?: string
+        ) => Promise<NadfunCreateCurveResult>;
     };
 } 
